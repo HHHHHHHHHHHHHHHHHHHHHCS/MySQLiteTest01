@@ -32,9 +32,7 @@ public class DbAccess
         try
         {
             dbConnection = new SqliteConnection(connectionString);
-
             dbConnection.Open();
-
             Debug.Log("Connected to db");
         }
         catch (Exception e)
@@ -78,6 +76,15 @@ public class DbAccess
 
         Debug.Log("Disconnected from db.");
 
+    }
+
+    public int ExecuteNonQuery(string sqlScript)
+    {
+        dbCommand = dbConnection.CreateCommand();
+
+        dbCommand.CommandText = sqlScript;
+
+        return dbCommand.ExecuteNonQuery();
     }
 
     public SqliteDataReader ExecuteQuery(string sqlQuery)

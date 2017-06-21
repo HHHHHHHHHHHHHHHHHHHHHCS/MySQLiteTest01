@@ -1,28 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Mono.Data.Sqlite;
+using System;
 
 public class Test : MonoBehaviour
 {
-    private string path = Application.dataPath + "/data.db";
+    private string _path;
+    private string path
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_path))
+            {
+                _path = Application.dataPath + "/data.db";
+            }
+            return _path;
+        }
+    }
+
 
     void Start()
     {
 
         DbAccess db = new DbAccess("data source=" + path);
-        db.CreateTable("momo", new string[] { "name", "qq", "email", "blog" }, new string[] { "text", "text", "text", "text" });
-
+        db.ExecuteNonQuery(SQLScripts.nowsite_createTable);
+        db.ExecuteNonQuery(SQLScripts.score_createTable);
+        string insertSQL = string.Format(SQLScripts.score_insert, Guid.NewGuid().ToString("N"), "2", "3", 4, 1, 0, "", "", "");
+        db.ExecuteNonQuery(insertSQL);
+        string updateSQL = string.Format(SQLScripts.score_update, "c8b497afdd8a477bbaf90d5fa7454e6d");
+        db.ExecuteNonQuery(updateSQL);
         db.CloseSqlConnection();
     }
 
 }
-
-
-//创建数据库名称为xuanyusong.db
-//DbAccess db = new DbAccess("data source=xuanyusong.db");
-
-//创建数据库表，与字段
-//db.CreateTable("momo", new string[] { "name", "qq", "email", "blog" }, new string[] { "text", "text", "text", "text" });
-//请注意 插入字符串是 已经要加上'宣雨松' 不然会报错
-//db.InsertInto("momo", new string[] { "'宣雨松'", "'289187120'", "'xuanyusong@gmail.com'", "'www.xuanyusong.com'" });
-//关闭对象
-//db.CloseSqlConnection();
