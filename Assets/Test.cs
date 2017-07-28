@@ -5,8 +5,8 @@ using System;
 
 public class Test : MonoBehaviour
 {
-    private string _path;
-    private string path
+    private static string _path;
+    private static string path
     {
         get
         {
